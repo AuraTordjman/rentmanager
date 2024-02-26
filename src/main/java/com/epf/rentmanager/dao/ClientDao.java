@@ -57,23 +57,23 @@ public class ClientDao {
 			throw new DaoException("Erreur lors de la création du client.", e);
 		}
 	}
-	
-	public long delete(Client client) throws DaoException
-	{
+
+	public long delete(long clientId) throws DaoException {
 		try (Connection connection = ConnectionManager.getConnection();
 			 PreparedStatement statement = connection.prepareStatement(DELETE_CLIENT_QUERY)) {
-			statement.setLong(1, client.getId());
+			statement.setLong(1, clientId);
 
 			int affectedRows = statement.executeUpdate();
 			if (affectedRows == 0) {
 				throw new DaoException("La suppression du client a échoué, aucune ligne affectée.");
 			} else {
-				return client.getId(); // Retourne l'identifiant du client supprimé
+				return clientId; // Retourne l'identifiant du client supprimé
 			}
 		} catch (SQLException e) {
 			throw new DaoException("Erreur lors de la suppression du client.", e);
 		}
 	}
+
 
 
 	public Client findById(long id) throws DaoException {

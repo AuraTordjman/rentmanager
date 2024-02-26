@@ -48,6 +48,13 @@ public class VehicleService {
 			throw serviceException;
 		}
 	}
+	public void delete(long id) throws ServiceException {
+		try {
+			vehicleDao.delete(id);
+		} catch (DaoException e) {
+			throw new ServiceException("Erreur lors de la suppression du véhicule : " + e.getMessage(), e);
+		}
+	}
 
 	public Vehicle findById(long id) throws ServiceException {
 		try {

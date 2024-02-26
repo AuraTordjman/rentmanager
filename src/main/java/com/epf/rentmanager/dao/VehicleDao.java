@@ -64,21 +64,22 @@ public class VehicleDao {
 		}
 	}
 
-	public long delete(Vehicle vehicle) throws DaoException {
+	public long delete(long id) throws DaoException {
 		try (Connection connection = ConnectionManager.getConnection();
 			 PreparedStatement statement = connection.prepareStatement(DELETE_VEHICLE_QUERY)) {
-			statement.setLong(1, vehicle.getId());
+			statement.setLong(1, id);
 
 			int affectedRows = statement.executeUpdate();
 			if (affectedRows == 0) {
 				throw new DaoException("La suppression du véhicule a échoué, aucune ligne affectée.");
 			} else {
-				return vehicle.getId(); // Retourne l'identifiant du véhicule supprimé
+				return id; // Retourne l'identifiant du véhicule supprimé
 			}
 		} catch (SQLException e) {
 			throw new DaoException("Erreur lors de la suppression du véhicule.", e);
 		}
 	}
+
 
 	public Vehicle findById(long id) throws DaoException {
 		try (Connection connection = ConnectionManager.getConnection();

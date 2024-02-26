@@ -33,6 +33,18 @@ public class VehicleCLI {
         }
     }
 
+    public void deleteVehicle() {
+        try {
+            long idToDelete = IOUtils.readInt("Entrez l'ID du véhicule à supprimer :");
+            // Si IOUtils.readInt ne fonctionne pas, utilisez IOUtils.readLong() et convertissez le résultat en int si nécessaire
+
+            vehicleService.delete(idToDelete);
+            System.out.println("Véhicule supprimé avec succès.");
+        } catch (ServiceException e) {
+            System.out.println("Erreur lors de la suppression du véhicule : " + e.getMessage());
+        }
+    }
+
     public void listVehicles() {
         try {
             System.out.println("Liste des véhicules :");
@@ -44,6 +56,4 @@ public class VehicleCLI {
             System.out.println("Erreur lors de la récupération de la liste des véhicules : " + e.getMessage());
         }
     }
-
-    // Autres méthodes pour la suppression, etc.
 }

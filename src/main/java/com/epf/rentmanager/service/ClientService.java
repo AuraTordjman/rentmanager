@@ -48,6 +48,13 @@ public class ClientService {
             throw new ServiceException("Erreur lors de la création du client : " + e.getMessage());
         }
     }
+    public void delete(long id) throws ServiceException {
+        try {
+            clientDao.delete(id);
+        } catch (DaoException e) {
+            throw new ServiceException("Erreur lors de la suppression du client : " + e.getMessage(), e);
+        }
+    }
 
 
     public Client findById(long id) throws ServiceException {
