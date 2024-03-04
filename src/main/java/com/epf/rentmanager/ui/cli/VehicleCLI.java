@@ -20,23 +20,26 @@ public class VehicleCLI {
             System.out.print("Constructeur : ");
             String constructeur = IOUtils.readString();
 
-            // Demander les autres informations nécessaires pour créer un véhicule
+            System.out.print("Modèle : ");
+            String modele = IOUtils.readString();
+
+            System.out.print("Nombre de places : ");
+            int nombreDePlaces = IOUtils.readInt("");
 
             Vehicle vehicle = new Vehicle();
             vehicle.setConstructeur(constructeur);
-            // Set other attributes
-
+            vehicle.setModele(modele);
+            vehicle.setNb_places(nombreDePlaces);
             long vehicleId = vehicleService.create(vehicle);
             System.out.println("Véhicule créé avec l'ID : " + vehicleId);
         } catch (ServiceException e) {
-            System.out.println("Erreur lors de la création du véhicule : " + e.getMessage());
+            System.out.println("Erreur lors de la création du véhiculeCLI : " + e.getMessage());
         }
     }
-
     public void deleteVehicle() {
         try {
+            listVehicles();
             long idToDelete = IOUtils.readInt("Entrez l'ID du véhicule à supprimer :");
-            // Si IOUtils.readInt ne fonctionne pas, utilisez IOUtils.readLong() et convertissez le résultat en int si nécessaire
 
             vehicleService.delete(idToDelete);
             System.out.println("Véhicule supprimé avec succès.");
@@ -44,7 +47,6 @@ public class VehicleCLI {
             System.out.println("Erreur lors de la suppression du véhicule : " + e.getMessage());
         }
     }
-
     public void listVehicles() {
         try {
             System.out.println("Liste des véhicules :");
@@ -55,5 +57,44 @@ public class VehicleCLI {
         } catch (ServiceException e) {
             System.out.println("Erreur lors de la récupération de la liste des véhicules : " + e.getMessage());
         }
+    }
+    public static void main(String[] args) {
+        VehicleService vehicleService = VehicleService.getInstance();
+        VehicleCLI vehicleCLI = new VehicleCLI(vehicleService);
+
+        boolean exit = false;
+
+        do {
+            displayMenu();
+            int choice = 0;
+            do {
+                choice = IOUtils.readInt("Votre choix :");
+            } while (choice < 1 || choice > 4); // Modifier le nombre d'options
+
+            switch (choice) {
+                case 1:
+                    vehicleCLI.createVehicle();
+                    break;
+                case 2:
+                    vehicleCLI.listVehicles();
+                    break;
+                case 3:
+                    vehicleCLI.deleteVehicle();
+                    break;
+                case 4:
+                    exit = true;
+                    break;
+                default:
+                    System.out.println("Choix invalide. Veuillez choisir une option entre 1 et 4.");
+            }
+        } while (!exit);
+    }
+
+    private static void displayMenu() {
+        System.out.println("Menu :");
+        System.out.println("1. Créer un véhicule");
+        System.out.println("2. Lister les véhicules");
+        System.out.println("3. Supprimer un véhicule");
+        System.out.println("4. Quitter");
     }
 }

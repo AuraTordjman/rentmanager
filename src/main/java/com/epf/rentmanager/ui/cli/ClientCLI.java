@@ -58,9 +58,9 @@ public class ClientCLI {
     public void deleteClient() {
         try {
             System.out.println("Suppression d'un client :");
-            listClients(); // Afficher la liste des clients disponibles
+            listClients(); // Afficher la liste des clients disponibles pour lui rappeler ceux qui existent
 
-            // Demander à l'utilisateur de saisir l'ID du client à supprimer
+            // Demande de saisir l'id du client à supprimer
             long idToDelete = IOUtils.readInt("Entrez l'ID du client à supprimer : ");
 
             // Appeler la méthode de suppression du ClientService

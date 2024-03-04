@@ -29,20 +29,19 @@ public class VehicleService {
 
 	public long create(Vehicle vehicle) throws ServiceException {
 		try {
-			// Vérifier si le constructeur du véhicule est vide
+
 			if (vehicle.getConstructeur().isEmpty()) {
 				throw new ServiceException("Le constructeur du véhicule ne peut pas être vide.");
 			}
 
-			// Vérifier si le nombre de places du véhicule est supérieur à 1
+
 			if (vehicle.getNb_places() <= 1) {
 				throw new ServiceException("Le nombre de places du véhicule doit être supérieur à 1.");
 			}
 
-			// Appeler la méthode create du DAO pour insérer le véhicule dans la base de données
 			return vehicleDao.create(vehicle);
 		} catch (DaoException e) {
-			// En cas d'erreur lors de l'insertion dans la base de données, lever une ServiceException
+
 			ServiceException serviceException = new ServiceException("Erreur lors de la création du véhicule : " + e.getMessage());
 			serviceException.initCause(e);
 			throw serviceException;

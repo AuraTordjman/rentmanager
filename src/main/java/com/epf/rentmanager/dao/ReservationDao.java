@@ -6,7 +6,7 @@ import java.util.List;
 import com.epf.rentmanager.model.Reservation;
 import com.epf.rentmanager.exception.DaoException;
 
-
+import java.time.LocalDate;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -73,7 +73,16 @@ public class ReservationDao {
 			throw new DaoException("Error while deleting reservation: " + e.getMessage(), e);
 		}
 	}
-
+	public long deleteParID(long reservationId) throws DaoException {
+		String query = "DELETE FROM reservation WHERE id = ?";
+		try (Connection connection = ConnectionManager.getConnection();
+			 PreparedStatement statement = connection.prepareStatement(query)) {
+			statement.setLong(1, reservationId);
+			return statement.executeUpdate();
+		} catch (SQLException e) {
+			throw new DaoException("Erreur lors de la suppression de la réservation : " + e.getMessage(), e);
+		}
+	}
 
 	public List<Reservation> findResaByClientId(long clientId) throws DaoException {
 		return new ArrayList<Reservation>();
@@ -101,7 +110,25 @@ public class ReservationDao {
 		return reservations;
 	}
 	public List<Reservation> findAll() throws DaoException {
-		return new ArrayList<Reservation>();
+		List<Reservation> reservations = new ArrayList<>();
+		try (Connection connection = ConnectionManager.getConnection();
+			 PreparedStatement statement = connection.prepareStatement(FIND_RESERVATIONS_QUERY);
+			 ResultSet resultSet = statement.executeQuery()) {
+
+			while (resultSet.next()) {
+				long id = resultSet.getLong("id");
+				int client_id = resultSet.getInt("client_id");
+				int vehicle_id = resultSet.getInt("vehicle_id");
+				LocalDate debut = resultSet.getDate("debut").toLocalDate();
+				LocalDate fin = resultSet.getDate("fin").toLocalDate();
+
+				Reservation reservation = new Reservation((int) id, client_id, vehicle_id, debut, fin);
+				reservations.add(reservation);
+			}
+		} catch (SQLException e) {
+			throw new DaoException("Erreur lors de la recherche de toutes les réservations.", e);
+		}
+		return reservations;
 	}
 	public Reservation findById(long id) throws DaoException {
 		try (Connection connection = ConnectionManager.getConnection();
