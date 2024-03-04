@@ -21,5 +21,4 @@ public class HomeServlet extends HttpServlet {
 
 		this.getServletContext().getRequestDispatcher("/WEB-INF/views/home.jsp").forward(request, response);
 	}
-
 }
