@@ -11,7 +11,7 @@ public class ReservationService {
     private ReservationDao reservationDao;
     private static ReservationService instance;
 
-    private ReservationService() {
+    public ReservationService() {
         this.reservationDao = ReservationDao.getInstance();
     }
 
@@ -63,4 +63,8 @@ public class ReservationService {
             throw new ServiceException("Erreur lors de la suppression de la réservation : " + e.getMessage(), e);
         }
     }
+    public int countReservations() throws ServiceException, DaoException {
+        return reservationDao.count();
+    }
+
 }

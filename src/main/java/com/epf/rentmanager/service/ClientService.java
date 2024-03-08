@@ -13,7 +13,7 @@ public class ClientService {
     private ClientDao clientDao;
     private static ClientService instance;
 
-    private ClientService() {
+    public ClientService() {
         this.clientDao = ClientDao.getInstance();
     }
 
@@ -80,4 +80,8 @@ public class ClientService {
             throw serviceException;
         }
     }
+    public int countClients() throws ServiceException, DaoException {
+        return clientDao.count();
+    }
+
 }

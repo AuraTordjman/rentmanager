@@ -122,6 +122,20 @@ public class VehicleDao {
 		}
 		return vehicles;
 	}
+	public int count() throws DaoException {
+		try (Connection connection = ConnectionManager.getConnection();
+			 PreparedStatement statement = connection.prepareStatement("SELECT COUNT(*) FROM Vehicle");
+			 ResultSet resultSet = statement.executeQuery()) {
+
+			if (resultSet.next()) {
+				return resultSet.getInt(1);
+			} else {
+				throw new DaoException("La requête de comptage des véhicules n'a retourné aucun résultat.");
+			}
+		} catch (SQLException e) {
+			throw new DaoException("Erreur lors du comptage des véhicules.", e);
+		}
+	}
 
 
 }

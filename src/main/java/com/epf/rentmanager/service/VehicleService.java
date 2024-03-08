@@ -14,7 +14,7 @@ public class VehicleService {
 	private VehicleDao vehicleDao;
 	public static VehicleService instance;
 	
-	private VehicleService() {
+	public VehicleService() {
 		this.vehicleDao = VehicleDao.getInstance();
 	}
 	
@@ -78,5 +78,9 @@ public class VehicleService {
 			throw serviceException;
 		}
 	}
-	
+	public int countVehicles() throws DaoException {
+		return vehicleDao.count();
+	}
+
+
 }

@@ -1,5 +1,11 @@
 package com.epf.rentmanager.servlet;
 
+import com.epf.rentmanager.exception.DaoException;
+import com.epf.rentmanager.exception.ServiceException;
+import com.epf.rentmanager.service.ClientService;
+import com.epf.rentmanager.service.ReservationService;
+import com.epf.rentmanager.service.VehicleService;
+
 import java.io.IOException;
 
 import javax.servlet.ServletException;
@@ -15,10 +21,24 @@ public class HomeServlet extends HttpServlet {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		try {
+			ClientService clientService = new ClientService();
+			VehicleService vehicleService = new VehicleService();
+			ReservationService reservationService = new ReservationService();
 
-		this.getServletContext().getRequestDispatcher("/WEB-INF/views/home.jsp").forward(request, response);
-	}
+			int vehicleCount = vehicleService.countVehicles();
+			int clientCount = clientService.countClients();
+			int reservationCount = reservationService.countReservations();
+
+			request.setAttribute("vehicleCount", vehicleCount);
+			request.setAttribute("clientCount", clientCount);
+			request.setAttribute("reservationCount", reservationCount);
+
+			request.getRequestDispatcher("/WEB-INF/views/home.jsp").forward(request, response);
+		} catch (DaoException | ServiceException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

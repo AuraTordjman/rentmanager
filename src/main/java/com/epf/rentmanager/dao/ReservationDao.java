@@ -171,5 +171,20 @@ public class ReservationDao {
 		}
 		return reservations;
 	}
+	public int count() throws DaoException {
+		try (Connection connection = ConnectionManager.getConnection();
+			 PreparedStatement statement = connection.prepareStatement("SELECT COUNT(*) FROM Reservation");
+			 ResultSet resultSet = statement.executeQuery()) {
+
+			if (resultSet.next()) {
+				return resultSet.getInt(1);
+			} else {
+				throw new DaoException("La requête de comptage des réservations n'a retourné aucun résultat.");
+			}
+		} catch (SQLException e) {
+			throw new DaoException("Erreur lors du comptage des réservations.", e);
+		}
+	}
+
 
 }

@@ -34,4 +34,5 @@ public class ClientListServlet extends HttpServlet {
             request.getRequestDispatcher("/WEB-INF/views/error.jsp").forward(request, response);
         }
     }
+
 }
