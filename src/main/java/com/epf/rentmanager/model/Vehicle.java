@@ -11,7 +11,7 @@ public class Vehicle {
         this.modele = modele;
         this.nb_places = nb_places;
     }
-    public Vehicle(){}
+    public Vehicle(String constructeur, String modele, int nbPlaces){}
 
     public long getId() {
         return id;

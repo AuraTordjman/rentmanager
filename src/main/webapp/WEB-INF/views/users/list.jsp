@@ -16,6 +16,7 @@
             <h1>
                 Utilisateurs
                 <a class="btn btn-primary" href="${pageContext.request.contextPath}/users/create">Ajouter</a>
+
             </h1>
         </section>
 
@@ -31,7 +32,7 @@
                                     <th>Nom</th>
                                     <th>Prenom</th>
                                     <th>Email</th>
-                                    <th>Action</th>
+                                    <th>Naissance</th>
                                 </tr>
                                 <c:forEach items="${users}" var="client" varStatus="status">
                                 <tr>

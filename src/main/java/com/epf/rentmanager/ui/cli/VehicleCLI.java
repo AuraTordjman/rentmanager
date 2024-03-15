@@ -26,7 +26,7 @@ public class VehicleCLI {
             System.out.print("Nombre de places : ");
             int nombreDePlaces = IOUtils.readInt("");
 
-            Vehicle vehicle = new Vehicle();
+            Vehicle vehicle = new Vehicle(constructeur, modele, nombreDePlaces);
             vehicle.setConstructeur(constructeur);
             vehicle.setModele(modele);
             vehicle.setNb_places(nombreDePlaces);
@@ -36,6 +36,7 @@ public class VehicleCLI {
             System.out.println("Erreur lors de la création du véhiculeCLI : " + e.getMessage());
         }
     }
+
     public void deleteVehicle() {
         try {
             listVehicles();
