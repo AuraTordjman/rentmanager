@@ -28,7 +28,15 @@ public class ReservationCreateServlet extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        List<Vehicle> listeDesVoitures = null;
+        try {
+            listeDesVoitures = VehicleService.findAll();
+        } catch (ServiceException e) {
+            throw new RuntimeException(e);
+        }
 
+        // Stocker la liste des voitures dans un attribut de la requête
+        request.setAttribute("listeDesVoitures", listeDesVoitures);
         RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/views/rents/create.jsp");
         dispatcher.forward(request, response);
     }
@@ -36,6 +44,7 @@ public class ReservationCreateServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
+            request.setCharacterEncoding("UTF-8");
             // Utiliser un DateTimeFormatter pour définir le format de date attendu
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 

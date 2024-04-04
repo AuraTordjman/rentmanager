@@ -34,24 +34,35 @@
                                     <th>Fin</th>
                                     <th>Action</th>
                                 </tr>
-                                <c:forEach items="${rents}" var="reservation" varStatus="status">
+                                <c:forEach items="${rents}" var="reservation">
                                         <tr>
-                                        <td>${status.index + 1}</td>
-                                        <td>${reservation.client_id}</td>
+                                        <td>${reservation.id}</td>
                                         <td>${reservation.vehicle_id}</td>
+                                        <td>${reservation.client_id}</td>
                                         <td>${reservation.debut}</td>
                                         <td>${reservation.fin}</td>
                                         <td>
-                                            <a class="btn btn-primary" href="${pageContext.request.contextPath}/rents/detail?id=${reservation.id}">
-                                                <i class="fa fa-play"></i>
-                                            </a>
-                                            <a class="btn btn-success" href="${pageContext.request.contextPath}/rents/edit?id=${reservation.id}">
-                                                <i class="fa fa-edit"></i>
-                                            </a>
-                                            <a class="btn btn-danger" href="${pageContext.request.contextPath}/rents/delete?id=${reservation.id}">
-                                                <i class="fa fa-trash"></i>
 
-                                            </a>
+                                            <div class="btn-group" role="group" style="display: flex;">
+                                                <form action="${pageContext.request.contextPath}/rents/details" method="get">
+                                                    <input type="hidden" name="reservationId" value="${reservation.id}">
+                                                    <button type="submit" class="btn btn-primary" style="margin-right: 5px;">
+                                                        <i class="fa fa-play"></i>
+                                                    </button>
+                                                </form>
+                                                <form action="${pageContext.request.contextPath}/rents/edit" method="post">
+                                                    <input type="hidden" name="reservationId" value="${reservation.id}">
+                                                    <button type="submit" class="btn btn-success" style="margin-right: 5px;">
+                                                        <i class="fa fa-edit"></i>
+                                                    </button>
+                                                </form>
+                                                <form action="${pageContext.request.contextPath}/rents/delete" method="post">
+                                                    <input type="hidden" name="reservationId" value="${reservation.id}">
+                                                    <button type="submit" class="btn btn-danger">
+                                                        <i class="fa fa-trash"></i>
+                                                    </button>
+                                                </form>
+                                            </div>
                                         </td>
 
                                         </tr>

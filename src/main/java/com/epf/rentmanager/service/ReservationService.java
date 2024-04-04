@@ -66,5 +66,12 @@ public class ReservationService {
     public int countReservations() throws ServiceException, DaoException {
         return reservationDao.count();
     }
+    public List<Reservation> findByClient(long id) throws ServiceException {
+        try {
+            return reservationDao.findResaByClientId(id);
+        } catch (DaoException e) {
+            throw new ServiceException("Erreur lors de la recherche par l'id du client (reservation)", e);
+        }
+    }
 
 }

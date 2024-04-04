@@ -1,5 +1,5 @@
 package com.epf.rentmanager.dao;
-import java.sql.Connection;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -7,10 +7,6 @@ import com.epf.rentmanager.model.Reservation;
 import com.epf.rentmanager.exception.DaoException;
 
 import java.time.LocalDate;
-
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 
 
 import com.epf.rentmanager.persistence.ConnectionManager;
@@ -30,37 +26,31 @@ public class ReservationDao {
 	private static final String FIND_RESERVATIONS_BY_CLIENT_QUERY = "SELECT id, vehicle_id, debut, fin FROM Reservation WHERE client_id=?;";
 	private static final String FIND_RESERVATIONS_BY_VEHICLE_QUERY = "SELECT id, client_id, debut, fin FROM Reservation WHERE vehicle_id=?;";
 	private static final String FIND_RESERVATIONS_QUERY = "SELECT id, client_id, vehicle_id, debut, fin FROM Reservation;";
-
 	public long create(Reservation reservation) throws DaoException {
-			try (Connection connection = ConnectionManager.getConnection();
-				 PreparedStatement statement = connection.prepareStatement(CREATE_RESERVATION_QUERY, PreparedStatement.RETURN_GENERATED_KEYS))
-			{
-				statement.setLong(1, reservation.getClient_id());
-				statement.setLong(2, reservation.getVehicle_id());
-				statement.setDate(3, java.sql.Date.valueOf(reservation.getDebut()));
-				statement.setDate(4, java.sql.Date.valueOf(reservation.getFin()));
+		try(Connection connection = ConnectionManager.getConnection();
+			Statement statement = connection.createStatement();
+			PreparedStatement ps = connection.prepareStatement(CREATE_RESERVATION_QUERY, statement.RETURN_GENERATED_KEYS);){
 
-				int affectedRows = statement.executeUpdate();
-				if (affectedRows == 0)
-				{
-					throw new DaoException("La création de la réservation a échoué, aucune ligne affectée.");
-				}
+			// Assignation des valeurs aux paramètres de la requête
+			ps.setInt(1,reservation.getClient_id());
+			ps.setInt(2, reservation.getVehicle_id());
+			ps.setDate(3, Date.valueOf(reservation.getDebut()));
+			ps.setDate(4, Date.valueOf(reservation.getFin()));
 
-				try (ResultSet generatedKeys = statement.getGeneratedKeys())
-				{
-					if (generatedKeys.next())
-					{
-						return generatedKeys.getLong(1); // Retourne l'identifiant généré pour la réservation créée
-					} else
-					{
-						throw new DaoException("La création de la réservation a échoué, aucun identifiant retourné.");
-					}
-				}
-			} catch (SQLException e)
-			{
-				throw new DaoException("Erreur lors de la création de la réservation.", e);
+			// Exécution de la requête
+			ps.execute();
+
+			ResultSet resultSet = ps.getGeneratedKeys();
+			if(resultSet.next()){
+				return resultSet.getInt(1);
 			}
+
+		}catch (SQLException e){
+			throw new DaoException("Erreur lors de la recherche du client par ID", e);
 		}
+		return -1;
+	}
+
 
 
 	public long delete(Reservation reservation) throws DaoException {
@@ -85,7 +75,33 @@ public class ReservationDao {
 	}
 
 	public List<Reservation> findResaByClientId(long clientId) throws DaoException {
-		return new ArrayList<Reservation>();
+		try (Connection connection = ConnectionManager.getConnection();
+			 Statement statement = connection.createStatement();
+			 PreparedStatement ps = connection.prepareStatement(FIND_RESERVATIONS_BY_CLIENT_QUERY);){
+
+			// Assignation de la valeur au paramètre de la requête
+			ps.setInt(1, (int) clientId);
+
+			//execution de la requete
+			ps.execute();
+			//resultat de la requete
+			ResultSet resultSet = ps.executeQuery();
+			List<Reservation>ReservatClientX = new ArrayList<>();
+
+			// Traitement des résultats
+			while (resultSet.next()) {
+				int id = resultSet.getInt("id");
+				int vehicle_id = resultSet.getInt("vehicle_id");
+				LocalDate debut = resultSet.getDate("debut").toLocalDate();
+				LocalDate fin = resultSet.getDate("fin").toLocalDate();
+				Reservation reservation = new Reservation(id, (int) clientId, vehicle_id, debut, fin);
+				ReservatClientX.add(reservation);
+			}
+			return ReservatClientX;
+
+		} catch (SQLException e) {
+			throw new DaoException("Erreur lors de la recherche de la reservation par ID client", e);
+		}
 	}
 
 	public List<Reservation> findResaByVehicleId(long vehicleId) throws DaoException {

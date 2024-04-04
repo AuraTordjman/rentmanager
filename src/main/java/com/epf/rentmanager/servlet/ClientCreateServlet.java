@@ -35,7 +35,7 @@ public class ClientCreateServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
-
+            request.setCharacterEncoding("UTF-8");
             String nom = request.getParameter("nom");
             String prenom = request.getParameter("prenom");
             String email = request.getParameter("email");
@@ -75,6 +75,3 @@ public class ClientCreateServlet extends HttpServlet {
 }
 
 
-
-//problème pourquoi pour véhicule on dirait qu'il me l'ajoute 2 fois mais ares uand je raffraichit c'est bon
-// pourquoi pour users il raffraichit une page vide (client ajouté)

@@ -56,6 +56,9 @@ import java.time.LocalDate;
         public void setFin(LocalDate fin) {
             this.fin = fin;
         }
+        public long getClientId() {
+            return client_id;
+        }
 
         @Override
         public String toString() {

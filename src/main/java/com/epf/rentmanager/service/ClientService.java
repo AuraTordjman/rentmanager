@@ -83,5 +83,12 @@ public class ClientService {
     public int countClients() throws ServiceException, DaoException {
         return clientDao.count();
     }
+    public void update(Client client) throws ServiceException {
+        try {
+            clientDao.update(client);
+        } catch (DaoException e) {
+            throw new ServiceException("Error updating client: " + e.getMessage(), e);
+        }
+    }
 
 }

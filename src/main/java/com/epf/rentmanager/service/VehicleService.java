@@ -11,7 +11,7 @@ import com.epf.rentmanager.dao.VehicleDao;
 
 public class VehicleService {
 
-	private VehicleDao vehicleDao;
+	private static VehicleDao vehicleDao;
 	public static VehicleService instance;
 	
 	public VehicleService() {
@@ -67,7 +67,7 @@ public class VehicleService {
 		}
 	}
 
-	public List<Vehicle> findAll() throws ServiceException {
+	public static List<Vehicle> findAll() throws ServiceException {
 		try {
 			// Appeler la méthode findAll du DAO pour récupérer tous les véhicules
 			return vehicleDao.findAll();

@@ -31,7 +31,7 @@ public class VehicleCreateServlet extends HttpServlet {
      protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
-
+            request.setCharacterEncoding("UTF-8");
             String constructeur = request.getParameter("constructeur");
             String modele = request.getParameter("modele");
             int nbPlaces = Integer.parseInt(request.getParameter("nb_places"));
@@ -51,7 +51,7 @@ public class VehicleCreateServlet extends HttpServlet {
             request.getSession().setAttribute("numberOfVehicles", numberOfVehicles);
 
             // Récupérer la liste des véhicules mise à jour
-            List<Vehicle> vehicles = vehicleService.findAll();
+            List<Vehicle> vehicles = VehicleService.findAll();
 
             // Ajouter le nouveau véhicule à la liste
             vehicles.add(newVehicle);

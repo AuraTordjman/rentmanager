@@ -33,22 +33,37 @@
                                     <th>Nombre de places</th>
                                     <th>Action</th>
                                 </tr>
-                                <c:forEach items="${vehicles}" var="vehicle" varStatus="status">
+                                <c:forEach items="${vehicles}" var="vehicle">
                                     <tr>
-                                        <td>${status.index + 1}</td>
+                                        <td>${vehicle.id}</td>
                                         <td>${vehicle.constructeur}</td>
                                         <td>${vehicle.modele}</td>
                                         <td>${vehicle.nb_places}</td>
                                         <td>
-                                            <a class="btn btn-primary" href="${pageContext.request.contextPath}/vehicles/detail?id=${vehicle.id}">
-                                                <i class="fa fa-play"></i>
-                                            </a>
-                                            <a class="btn btn-success" href="${pageContext.request.contextPath}/vehicles/edit?id=${vehicle.id}">
-                                                <i class="fa fa-edit"></i>
-                                            </a>
-                                            <a class="btn btn-danger" href="${pageContext.request.contextPath}/vehicles/delete?id=${vehicle.id}">
-                                                <i class="fa fa-trash"></i>
-                                            </a>
+
+                                            <div class="btn-group" role="group" style="display: flex;">
+                                                <form action="${pageContext.request.contextPath}/vehicles/details" method="get">
+                                                    <input type="hidden" name="vehicleId" value="${vehicle.id}">
+                                                    <button type="submit" class="btn btn-primary" style="margin-right: 5px;">
+                                                        <i class="fa fa-play"></i>
+                                                    </button>
+                                                </form>
+                                                <form action="${pageContext.request.contextPath}/vehicles/edit" method="post">
+                                                    <input type="hidden" name="vehicleId" value="${vehicle.id}">
+                                                    <button type="submit" class="btn btn-success" style="margin-right: 5px;">
+                                                        <i class="fa fa-edit"></i>
+                                                    </button>
+                                                </form>
+                                                <form action="${pageContext.request.contextPath}/vehicles/delete" method="post">
+                                                    <input type="hidden" name="vehicleId" value="${vehicle.id}">
+                                                    <button type="submit" class="btn btn-danger">
+                                                        <i class="fa fa-trash"></i>
+                                                    </button>
+                                                </form>
+                                            </div>
+
+
+
                                         </td>
                                     </tr>
                                 </c:forEach>

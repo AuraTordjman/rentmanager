@@ -20,17 +20,17 @@
                     <!-- Profile Image -->
                     <div class="box box-primary" style="width: 400px;">
                         <div class="box-body box-profile">
-                            <h3 class="profile-username text-center">Information sur le client :</h3>
+                            <h3 class="profile-username text-center">Information sur la reservation :</h3>
 
                             <ul class="list-group list-group-unbordered">
                                 <li class="list-group-item">
-                                    <b>Identite</b> <span class="pull-right">${client.nom} ${client.prenom}</span>
+                                    <b>Identite</b> <span class="pull-right">${client.nom}</span>
                                 </li>
                                 <li class="list-group-item">
-                                    <b>Adresse email</b> <span class="pull-right">(${client.email})</span>
+                                    <b>Date</b> <span class="pull-right">(${reservation.debut})</span>
                                 </li>
                                 <li class="list-group-item">
-                                    <b>Reservation(s)</b> <span class="pull-right">${reservations.size()}</span>
+                                    <b>Vehicule reserve</b> <span class="pull-right">${vehicle.modele}</span>
                                 </li>
                             </ul>
                         </div>
@@ -40,9 +40,9 @@
                 </div>
                 <!-- /.col -->
 
-                    <!-- /.nav-tabs-custom -->
-                </div>
-                <!-- /.col -->
+                <!-- /.nav-tabs-custom -->
+            </div>
+            <!-- /.col -->
 
             <!-- /.row -->
 

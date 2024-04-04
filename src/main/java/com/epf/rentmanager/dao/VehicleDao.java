@@ -1,15 +1,11 @@
 package com.epf.rentmanager.dao;
 
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
 import com.epf.rentmanager.model.Vehicle;
 import com.epf.rentmanager.exception.DaoException;
-
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 
 
 import com.epf.rentmanager.persistence.ConnectionManager;
@@ -29,40 +25,33 @@ public class VehicleDao {
 	private static final String DELETE_VEHICLE_QUERY = "DELETE FROM Vehicle WHERE id=?;";
 	private static final String FIND_VEHICLE_QUERY = "SELECT id, constructeur,modele, nb_places FROM Vehicle WHERE id=?;";
 	private static final String FIND_VEHICLES_QUERY = "SELECT id, constructeur, modele, nb_places FROM Vehicle;";
-	
 
-	public long create(Vehicle vehicle) throws DaoException
-	{
-		try (Connection connection = ConnectionManager.getConnection();
-			 PreparedStatement statement = connection.prepareStatement(CREATE_VEHICLE_QUERY, PreparedStatement.RETURN_GENERATED_KEYS))
-		{
-			statement.setString(1, vehicle.getConstructeur());
-			statement.setString(2, vehicle.getModele());
-			statement.setInt(3, vehicle.getNb_places());
+	public long create(Vehicle vehicule) throws DaoException {
+		try(Connection connection = ConnectionManager.getConnection();
+			Statement statement = connection.createStatement();
+			PreparedStatement ps = connection.prepareStatement(CREATE_VEHICLE_QUERY, statement.RETURN_GENERATED_KEYS);){
 
-			int affectedRows = statement.executeUpdate();
-			if (affectedRows == 0)
-			{
-				throw new DaoException("La création du véhicule a échoué, aucune ligne affectée.");
+			// Assignation des valeurs aux paramètres de la requête
+			ps.setString(1, vehicule.getConstructeur());
+			ps.setString(2, vehicule.getModele());
+			ps.setInt(3, vehicule.getNb_places());
+
+			// Exécution de la requête
+			ps.execute();
+
+			ResultSet resultSet = ps.getGeneratedKeys();
+			if(resultSet.next()){
+				return resultSet.getInt(1);
+			}else {
+				System.out.println("Erreur lors de l'ajout du vehicule");
 			}
 
-			try (ResultSet generatedKeys = statement.getGeneratedKeys())
-			{
-				if (generatedKeys.next())
-				{
-					return generatedKeys.getLong(1); // Retourne l'identifiant généré pour le véhicule créé
-				}
-				else
-				{
-					throw new DaoException("La création du véhicule a échoué, aucun identifiant retourné.");
-				}
-			}
+		}catch (SQLException e) {
+			throw new DaoException("Erreur lors de la recherche du véhicule", e);
 		}
-		catch (SQLException e)
-		{
-			throw new DaoException("Erreur lors de la création du véhicule.", e);
-		}
+		return -1;
 	}
+
 
 	public long delete(long id) throws DaoException {
 		try (Connection connection = ConnectionManager.getConnection();

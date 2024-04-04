@@ -34,23 +34,40 @@
                                     <th>Email</th>
                                     <th>Naissance</th>
                                 </tr>
-                                <c:forEach items="${users}" var="client" varStatus="status">
+                                <c:forEach items="${users}" var="client">
                                 <tr>
-                                    <td>${status.index + 1}</td>
+                                    <td>${client.id}.</td>
                                     <td>${client.nom}</td>
                                     <td>${client.prenom}</td>
                                     <td>${client.email}</td>
                                     <td>${client.naissance}</td>
                                     <td>
-                                    <a class="btn btn-primary" href="${pageContext.request.contextPath}/users/detail?id=${client.id}">
-                                    <i class="fa fa-play"></i>
-                                    </a>
-                                    <a class="btn btn-success" href="${pageContext.request.contextPath}/users/edit?id=${client.id}">
-                                    <i class="fa fa-edit"></i>
-                                    </a>
-                                    <a class="btn btn-danger" href="${pageContext.request.contextPath}/users/delete?id=${client.id}">
-                                    <i class="fa fa-trash"></i>
-                                    </a>
+
+                                        <div class="btn-group" role="group" style="display: flex;">
+
+                                            <form action="${pageContext.request.contextPath}/users/details" method="get">
+                                                <input type="hidden" name="clientId" value="${client.id}">
+                                                <button type="submit" class="btn btn-primary" style="margin-right: 5px;">
+                                                    <i class="fa fa-play"></i>
+                                                </button>
+                                            </form>
+                                            <form action="${pageContext.request.contextPath}/users/edit" method="post">
+                                                <input type="hidden" name="clientId" value="${client.id}">
+                                                <button type="submit" class="btn btn-success" style="margin-right: 5px;">
+                                                    <i class="fa fa-edit"></i>
+                                                </button>
+                                            </form>
+                                            <form action="${pageContext.request.contextPath}/users/delete" method="post">
+                                                <input type="hidden" name="clientId" value="${client.id}">
+                                                <button type="submit" class="btn btn-danger">
+                                                    <i class="fa fa-trash"></i>
+
+                                                </button>
+                                            </form>
+                                        </div>
+
+
+
                                     </td>
                                 </tr>
                                 </c:forEach>

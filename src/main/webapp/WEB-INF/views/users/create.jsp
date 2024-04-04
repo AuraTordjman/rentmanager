@@ -25,7 +25,7 @@
                     <!-- Horizontal Form -->
                     <div class="box">
                         <!-- form start -->
-                        <form action="${pageContext.request.contextPath}/users/create" method="post">
+                        <form action="${pageContext.request.contextPath}/users/create" method="post" accept-charset="UTF-8">
                             <div class="box-body">
                                 <div class="form-group">
                                     <label for="nom" class="col-sm-2 control-label">Nom</label>

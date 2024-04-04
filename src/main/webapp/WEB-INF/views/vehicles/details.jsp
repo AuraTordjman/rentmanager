@@ -1,3 +1,6 @@
+
+
+
 <%@ taglib uri = "http://java.sun.com/jsp/jstl/core" prefix = "c" %>
 <!DOCTYPE html>
 <html>
@@ -20,17 +23,17 @@
                     <!-- Profile Image -->
                     <div class="box box-primary" style="width: 400px;">
                         <div class="box-body box-profile">
-                            <h3 class="profile-username text-center">Information sur le client :</h3>
+                            <h3 class="profile-username text-center">Information sur le vehicule :</h3>
 
                             <ul class="list-group list-group-unbordered">
                                 <li class="list-group-item">
-                                    <b>Identite</b> <span class="pull-right">${client.nom} ${client.prenom}</span>
+                                    <b>Modele</b> <span class="pull-right">${vehicle.modele}</span>
                                 </li>
                                 <li class="list-group-item">
-                                    <b>Adresse email</b> <span class="pull-right">(${client.email})</span>
+                                    <b>Constructeur</b> <span class="pull-right">${vehicle.constructeur}</span>
                                 </li>
                                 <li class="list-group-item">
-                                    <b>Reservation(s)</b> <span class="pull-right">${reservations.size()}</span>
+                                    <b>Nombre de place(s)</b> <span class="pull-right">${vehicle.nb_places}</span>
                                 </li>
                             </ul>
                         </div>
@@ -40,9 +43,9 @@
                 </div>
                 <!-- /.col -->
 
-                    <!-- /.nav-tabs-custom -->
-                </div>
-                <!-- /.col -->
+                <!-- /.nav-tabs-custom -->
+            </div>
+            <!-- /.col -->
 
             <!-- /.row -->
 
@@ -57,3 +60,4 @@
 <%@ include file="/WEB-INF/views/common/js_imports.jsp" %>
 </body>
 </html>
+

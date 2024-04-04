@@ -133,6 +133,26 @@ public class ClientDao {
 			throw new DaoException("Erreur lors du comptage des clients.", e);
 		}
 	}
+	private static final String UPDATE_CLIENT_QUERY = "UPDATE Client SET nom=?, prenom=?, email=?, naissance=? WHERE id=?;";
+
+	public void update(Client client) throws DaoException {
+		try (Connection connection = ConnectionManager.getConnection();
+			 PreparedStatement statement = connection.prepareStatement(UPDATE_CLIENT_QUERY)) {
+			statement.setString(1, client.getNom());
+			statement.setString(2, client.getPrenom());
+			statement.setString(3, client.getEmail());
+			statement.setDate(4, java.sql.Date.valueOf(client.getNaissance()));
+			statement.setLong(5, client.getId());
+
+			int affectedRows = statement.executeUpdate();
+			if (affectedRows == 0) {
+				throw new DaoException("La mise à jour du client a échoué, aucune ligne affectée.");
+			}
+		} catch (SQLException e) {
+			throw new DaoException("Erreur lors de la mise à jour du client.", e);
+		}
+	}
+
 
 
 }

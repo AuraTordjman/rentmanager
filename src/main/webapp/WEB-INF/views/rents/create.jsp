@@ -25,24 +25,22 @@
                     <!-- Horizontal Form -->
                     <div class="box">
                         <!-- form start -->
-                        <form action="${pageContext.request.contextPath}/rents/create" method="post">
+                        <form action="${pageContext.request.contextPath}/rents/create" method="post" accept-charset="UTF-8">
 
                             <div class="box-body">
 
                                 <div class="form-group">
                                     <label for="car" class="col-sm-2 control-label">Voiture</label>
-
                                     <div class="col-sm-10">
-                                        <!--<select class="form-control" id="car" name="car">
-
-                                            <option value="1">Renault Clio</option>
-                                            <option value="2">Citroen C2</option>
-                                                    ça sert pour fr une liste déroulante, j'ai mis des champs plutot
-                                        </select>-->
-                                        <input type="text" class="form-control" id="car" name="car" placeholder="Voiture" required>
-
+                                        <select class="form-control" id="car" name="car">
+                                            <option value="">Sélectionnez une voiture</option>
+                                            <c:forEach items="${listeDesVoitures}" var="vehicle">
+                                                <option value="${vehicle.id}">${vehicle.constructeur}</option>
+                                            </c:forEach>
+                                        </select>
                                     </div>
                                 </div>
+
 
                                 <div class="form-group">
                                     <label for="client" class="col-sm-2 control-label">Client</label>
