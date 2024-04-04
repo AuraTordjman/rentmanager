@@ -44,16 +44,16 @@
 
                                 <div class="form-group">
                                     <label for="client" class="col-sm-2 control-label">Client</label>
-
                                     <div class="col-sm-10">
-                                        <!-- <select class="form-control" id="client" name="client">
-
-                                             <option value="1">John Doe</option>
-                                             <option value="2">Jane Doe</option>
-                                        </select> -->
-                                        <input type="text" class="form-control" id="client" name="client" placeholder="Client" required>
+                                        <select class="form-control" id="client" name="client">
+                                            <option value="">Sélectionnez un client</option>
+                                            <c:forEach items="${listeDesClients}" var="client">
+                                                <option value="${client.id}">${client.nom} ${client.prenom}</option>
+                                            </c:forEach>
+                                        </select>
                                     </div>
                                 </div>
+
                                 <div class="form-group">
                                     <label for="begin" class="col-sm-2 control-label">Date de debut</label>
 

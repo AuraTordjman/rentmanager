@@ -13,12 +13,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.epf.rentmanager.exception.DaoException;
+import com.epf.rentmanager.model.Client;
 import com.epf.rentmanager.model.Reservation;
 import com.epf.rentmanager.model.Vehicle;
 import com.epf.rentmanager.exception.ServiceException;
 import com.epf.rentmanager.service.ReservationService;
 import com.epf.rentmanager.service.VehicleService;
-
+import com.epf.rentmanager.service.ClientService;
 
 @WebServlet("/rents/create")
 
@@ -29,14 +30,22 @@ public class ReservationCreateServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         List<Vehicle> listeDesVoitures = null;
+        List<Client> listeDesClients = null;
+
         try {
             listeDesVoitures = VehicleService.findAll();
+            // Instanciation d'un objet
+            ClientService clientService = new ClientService();
+
+
+            listeDesClients = clientService.findAll();
         } catch (ServiceException e) {
             throw new RuntimeException(e);
         }
 
         // Stocker la liste des voitures dans un attribut de la requête
         request.setAttribute("listeDesVoitures", listeDesVoitures);
+        request.setAttribute("listeDesClients", listeDesClients);
         RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/views/rents/create.jsp");
         dispatcher.forward(request, response);
     }
@@ -65,14 +74,14 @@ public class ReservationCreateServlet extends HttpServlet {
             // Mise à jour de l'ID après la création
             newReservation.setId((int) generatedId);
 
-            // Mise à jour du nombre de véhicules dans la session
+            // Mise à jour du nombre de dans la session
             int numberOfReservations = reservationService.countReservations();
             request.getSession().setAttribute("numberOfReservations", numberOfReservations);
 
-            // Récupérer la liste des véhicules mise à jour
+            // Récupérer la liste des resa mise à jour
             List<Reservation> reservations = reservationService.findAll();
 
-            // Ajouter le nouveau véhicule à la liste
+            // Ajouter la nouvelle resa à la liste
             reservations.add(newReservation);
 
             // Mettre à jour l'attribut de la requête avec la liste mise à jour
