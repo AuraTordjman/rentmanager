@@ -152,8 +152,12 @@ public class ReservationDao {
 			preparedStatement.setLong(1, id);
 			try (ResultSet resultSet = preparedStatement.executeQuery()) {
 				if (resultSet.next()) {
-					Reservation reservation = new Reservation();
-					reservation.setId((int) resultSet.getLong("id"));
+					int Newid = (int) id;
+					int client_id = resultSet.getInt("client_id");
+					int vehicle_id = resultSet.getInt("vehicle_id");
+					LocalDate debut = resultSet.getDate("debut").toLocalDate();
+					LocalDate fin = resultSet.getDate("fin").toLocalDate();
+					Reservation reservation = new Reservation(Newid, client_id, vehicle_id, debut, fin);
 					// Set other attributes of reservation
 					return reservation;
 				} else {

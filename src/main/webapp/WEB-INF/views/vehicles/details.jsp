@@ -29,6 +29,7 @@
                                 <li class="list-group-item">
                                     <b>Modele</b> <span class="pull-right">${vehicle.modele}</span>
                                 </li>
+
                                 <li class="list-group-item">
                                     <b>Constructeur</b> <span class="pull-right">${vehicle.constructeur}</span>
                                 </li>

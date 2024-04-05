@@ -27,11 +27,15 @@
                                     <b>Identite</b> <span class="pull-right">${client.nom}</span>
                                 </li>
                                 <li class="list-group-item">
-                                    <b>Date</b> <span class="pull-right">(${reservation.debut})</span>
+                                    <b>Debut de reservation</b> <span class="pull-right">(${reservation.debut})</span>
                                 </li>
                                 <li class="list-group-item">
-                                    <b>Vehicule reserve</b> <span class="pull-right">${vehicle.modele}</span>
+                                    <b>Fin de reservation</b> <span class="pull-right">(${reservation.fin})</span>
                                 </li>
+                                <li class="list-group-item">
+                                    <b>Vehicule reserve</b> <span class="pull-right">${vehicle.constructeur}, ${vehicle.modele} </span>
+                                </li>
+
                             </ul>
                         </div>
                         <!-- /.box-body -->

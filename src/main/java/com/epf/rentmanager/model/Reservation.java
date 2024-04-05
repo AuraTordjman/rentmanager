@@ -59,7 +59,7 @@ import java.time.LocalDate;
         public long getClientId() {
             return client_id;
         }
-
+        
         @Override
         public String toString() {
             return "Reservation{" +
