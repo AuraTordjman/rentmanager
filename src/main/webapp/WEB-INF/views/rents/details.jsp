@@ -24,7 +24,7 @@
 
                             <ul class="list-group list-group-unbordered">
                                 <li class="list-group-item">
-                                    <b>Identite</b> <span class="pull-right">${client.nom}</span>
+                                    <b>Identite</b> <span class="pull-right">${client.nom}, ${client.prenom} </span>
                                 </li>
                                 <li class="list-group-item">
                                     <b>Debut de reservation</b> <span class="pull-right">(${reservation.debut})</span>

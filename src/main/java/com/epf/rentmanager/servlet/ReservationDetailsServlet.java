@@ -28,8 +28,6 @@ public class ReservationDetailsServlet extends HttpServlet {
         try {
             long reservationId = Long.parseLong(request.getParameter("reservationId"));
             Reservation reservation = reservationService.findById(reservationId);
-            int id = reservation.getVehicle_id();
-            System.out.println(reservation);
             Vehicle vehicle = vehicleService.findById(reservation.getVehicle_id());
             Client client = clientService.findById(reservation.getClient_id());
 
