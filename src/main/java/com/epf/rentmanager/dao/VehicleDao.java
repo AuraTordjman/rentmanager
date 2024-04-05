@@ -4,6 +4,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.epf.rentmanager.model.Client;
 import com.epf.rentmanager.model.Vehicle;
 import com.epf.rentmanager.exception.DaoException;
 
@@ -123,6 +124,24 @@ public class VehicleDao {
 			}
 		} catch (SQLException e) {
 			throw new DaoException("Erreur lors du comptage des véhicules.", e);
+		}
+	}
+	private static final String UPDATE_VEHICLE_QUERY = "UPDATE Vehicle SET constructeur=?, modele=?, nb_places=? WHERE id=?;";
+	public void update(Vehicle vehicle) throws DaoException {
+		try (Connection connection = ConnectionManager.getConnection();
+			 PreparedStatement statement = connection.prepareStatement(UPDATE_VEHICLE_QUERY)) {
+			statement.setString(1, vehicle.getConstructeur());
+			statement.setString(2, vehicle.getModele());
+			statement.setInt(3, vehicle.getNb_places());
+			statement.setLong(4, vehicle.getId());
+
+
+			int affectedRows = statement.executeUpdate();
+			if (affectedRows == 0) {
+				throw new DaoException("La mise à jour du vehicule a échoué, aucune ligne affectée.");
+			}
+		} catch (SQLException e) {
+			throw new DaoException("Erreur lors de la mise à jour du vehicule.", e);
 		}
 	}
 

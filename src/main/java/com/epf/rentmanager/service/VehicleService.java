@@ -81,6 +81,13 @@ public class VehicleService {
 	public int countVehicles() throws DaoException {
 		return vehicleDao.count();
 	}
+	public void update(Vehicle vehicle) throws ServiceException {
+		try {
+			vehicleDao.update(vehicle);
+		} catch (DaoException e) {
+			throw new ServiceException("Error updating client: " + e.getMessage(), e);
+		}
+	}
 
 
 }

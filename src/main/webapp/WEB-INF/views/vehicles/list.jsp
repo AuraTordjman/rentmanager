@@ -48,15 +48,12 @@
                                                         <i class="fa fa-play"></i>
                                                     </button>
                                                 </form>
-                                                <form action="${pageContext.request.contextPath}/vehicles/edit" method="post">
-                                                    <input type="hidden" name="vehicleId" value="${vehicle.id}">
-                                                    <button type="submit" class="btn btn-success" style="margin-right: 5px;">
-                                                        <i class="fa fa-edit"></i>
-                                                    </button>
-                                                </form>
+                                                <a class="btn btn-success " style="border-radius:3px;" href="${pageContext.request.contextPath}/vehicles/edit?id=${vehicle.id}">
+                                                <i class="fa fa-edit"></i>
+                                                </a>
                                                 <form action="${pageContext.request.contextPath}/vehicles/delete" method="post">
                                                     <input type="hidden" name="vehicleId" value="${vehicle.id}">
-                                                    <button type="submit" class="btn btn-danger">
+                                                    <button type="submit" class="btn btn-danger" style="margin-left: 5px;">
                                                         <i class="fa fa-trash"></i>
                                                     </button>
                                                 </form>
