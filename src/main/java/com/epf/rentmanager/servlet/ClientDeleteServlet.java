@@ -16,12 +16,18 @@ import com.epf.rentmanager.model.Client;
 import com.epf.rentmanager.model.Vehicle;
 import com.epf.rentmanager.exception.ServiceException;
 import com.epf.rentmanager.service.ClientService;
+import com.epf.rentmanager.service.ReservationService;
 import com.epf.rentmanager.service.VehicleService;
+import org.springframework.beans.factory.annotation.Autowired;
 
 
 @WebServlet("/users/delete")
 public class ClientDeleteServlet extends HttpServlet {
-
+    private static final long serialVersionUID = 1L;
+    @Autowired
+    private ClientService clientService;
+    @Autowired
+    private ReservationService reservationService;
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
@@ -29,7 +35,7 @@ public class ClientDeleteServlet extends HttpServlet {
             long clientId = Long.parseLong(request.getParameter("clientId"));
 
             // Appel à la méthode delete du service pour supprimer le client
-            ClientService clientService = ClientService.getInstance();
+            //ClientService clientService = ClientService.getInstance();
             clientService.delete(clientId);
 
             // Redirection vers la liste des clients après la suppression

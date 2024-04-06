@@ -20,24 +20,33 @@ import com.epf.rentmanager.exception.ServiceException;
 import com.epf.rentmanager.service.ReservationService;
 import com.epf.rentmanager.service.VehicleService;
 import com.epf.rentmanager.service.ClientService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
 @WebServlet("/rents/create")
 
 
 public class ReservationCreateServlet extends HttpServlet {
-    //private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
+    @Autowired
+    private ReservationService reservationService;
+    @Autowired
+    private ClientService clientService;
+    @Autowired
+    private VehicleService vehicleService;
 
+    @Override
+    public void init() throws ServletException {
+        super.init();
+        SpringBeanAutowiringSupport.processInjectionBasedOnCurrentContext(this);
+    }
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         List<Vehicle> listeDesVoitures = null;
         List<Client> listeDesClients = null;
 
         try {
-            listeDesVoitures = VehicleService.findAll();
-            // Instanciation d'un objet
-            ClientService clientService = new ClientService();
-
-
+            listeDesVoitures = vehicleService.findAll();
             listeDesClients = clientService.findAll();
         } catch (ServiceException e) {
             throw new RuntimeException(e);
@@ -68,28 +77,11 @@ public class ReservationCreateServlet extends HttpServlet {
            Reservation newReservation = new Reservation(-1, client, car, begin , end);
 
             // Appel à la méthode create du service
-            ReservationService reservationService = ReservationService.getInstance();
-            long generatedId = reservationService.create(newReservation);
-
-            // Mise à jour de l'ID après la création
-            newReservation.setId((int) generatedId);
-
-            // Mise à jour du nombre de dans la session
-            int numberOfReservations = reservationService.countReservations();
-            request.getSession().setAttribute("numberOfReservations", numberOfReservations);
-
-            // Récupérer la liste des resa mise à jour
-            List<Reservation> reservations = reservationService.findAll();
-
-            // Ajouter la nouvelle resa à la liste
-            reservations.add(newReservation);
-
-            // Mettre à jour l'attribut de la requête avec la liste mise à jour
-            request.setAttribute("reservations", reservations);
+            reservationService.create(newReservation);
 
             // Redirection vers la liste des clients
             response.sendRedirect(request.getContextPath() + "/rents");
-        } catch (ServiceException | DaoException e) {
+        } catch (ServiceException e) {
             // Gérer l'exception (par exemple, rediriger vers une page d'erreur)
             e.printStackTrace();
         }

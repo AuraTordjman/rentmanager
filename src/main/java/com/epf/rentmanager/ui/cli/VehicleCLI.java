@@ -59,6 +59,7 @@ public class VehicleCLI {
             System.out.println("Erreur lors de la récupération de la liste des véhicules : " + e.getMessage());
         }
     }
+    /*
     public static void main(String[] args) {
         VehicleService vehicleService = VehicleService.getInstance();
         VehicleCLI vehicleCLI = new VehicleCLI(vehicleService);
@@ -98,4 +99,6 @@ public class VehicleCLI {
         System.out.println("3. Supprimer un véhicule");
         System.out.println("4. Quitter");
     }
+
+     */
 }

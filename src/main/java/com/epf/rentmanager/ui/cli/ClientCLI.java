@@ -71,7 +71,7 @@ public class ClientCLI {
         }
     }
 
-
+/*
     public static void main(String[] args) {
         boolean exit = false;
         ClientService clientService = ClientService.getInstance();
@@ -110,4 +110,6 @@ public class ClientCLI {
         System.out.println("3. Supprimer un client"); // Ajouter une option de suppression
         System.out.println("4. Quitter");
     }
+
+ */
 }

@@ -9,11 +9,23 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.epf.rentmanager.exception.ServiceException;
+import com.epf.rentmanager.service.ReservationService;
 import com.epf.rentmanager.service.VehicleService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
 @WebServlet("/vehicles/delete")
 public class VehicleDeleteServlet extends HttpServlet {
-
+    private static final long serialVersionUID = 1L;
+    @Autowired
+    private VehicleService vehicleService;
+    @Autowired
+    private ReservationService reservationService;
+    @Override
+    public void init() throws ServletException {
+        super.init();
+        SpringBeanAutowiringSupport.processInjectionBasedOnCurrentContext(this);
+    }
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
@@ -21,7 +33,7 @@ public class VehicleDeleteServlet extends HttpServlet {
             long vehicleId = Long.parseLong(request.getParameter("vehicleId"));
 
             // Appel à la méthode delete du service pour supprimer le véhicule
-            VehicleService vehicleService = VehicleService.getInstance();
+
             vehicleService.delete(vehicleId);
 
             // Redirection vers la liste des véhicules après la suppression

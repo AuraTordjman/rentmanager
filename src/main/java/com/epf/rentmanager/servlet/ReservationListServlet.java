@@ -12,15 +12,20 @@ import javax.servlet.http.HttpServletResponse;
 import com.epf.rentmanager.exception.ServiceException;
 import com.epf.rentmanager.model.Reservation;
 import com.epf.rentmanager.service.ReservationService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
 @WebServlet("/rents")
 public class ReservationListServlet extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
+    @Autowired
     private ReservationService reservationService;
 
-    public ReservationListServlet() {
-        this.reservationService = ReservationService.getInstance();
+    @Override
+    public void init() throws ServletException {
+        super.init();
+        SpringBeanAutowiringSupport.processInjectionBasedOnCurrentContext(this);
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response)

@@ -4,23 +4,20 @@ import java.util.List;
 import com.epf.rentmanager.dao.ReservationDao;
 import com.epf.rentmanager.exception.DaoException;
 import com.epf.rentmanager.exception.ServiceException;
+import com.epf.rentmanager.model.Client;
 import com.epf.rentmanager.model.Reservation;
+import org.springframework.stereotype.Service;
 
+@Service
 public class ReservationService {
 
-    private ReservationDao reservationDao;
-    private static ReservationService instance;
+    private final ReservationDao reservationDao;
 
-    public ReservationService() {
-        this.reservationDao = ReservationDao.getInstance();
+
+    public ReservationService(ReservationDao reservationDao) {
+        this.reservationDao = reservationDao;
     }
 
-    public static ReservationService getInstance() {
-        if (instance == null) {
-            instance = new ReservationService();
-        }
-        return instance;
-    }
 
     public long create(Reservation reservation) throws ServiceException {
         try {
@@ -71,6 +68,13 @@ public class ReservationService {
             return reservationDao.findResaByClientId(id);
         } catch (DaoException e) {
             throw new ServiceException("Erreur lors de la recherche par l'id du client (reservation)", e);
+        }
+    }
+    public void update(Reservation reservation) throws ServiceException {
+        try {
+            reservationDao.update(reservation);
+        } catch (DaoException e) {
+            throw new ServiceException("Error updating reservation: " + e.getMessage(), e);
         }
     }
 

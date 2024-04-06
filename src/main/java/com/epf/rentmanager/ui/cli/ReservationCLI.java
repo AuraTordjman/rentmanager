@@ -69,6 +69,7 @@ public class ReservationCLI {
             System.out.println("Erreur lors de la récupération de la liste des réservations : " + e.getMessage());
         }
     }
+    /*
     public static void main(String[] args) {
         boolean exit = false;
         ReservationService reservationService = ReservationService.getInstance();
@@ -107,5 +108,5 @@ public class ReservationCLI {
         System.out.println("3. Supprimer une réservation");
         System.out.println("4. Quitter");
     }
-
+*/
 }

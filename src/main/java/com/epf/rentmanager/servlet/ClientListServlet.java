@@ -12,17 +12,21 @@ import javax.servlet.http.HttpServletResponse;
 import com.epf.rentmanager.exception.ServiceException;
 import com.epf.rentmanager.model.Client;
 import com.epf.rentmanager.service.ClientService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
 @WebServlet("/users")
 public class ClientListServlet extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
+    @Autowired
     private ClientService clientService;
 
-    public ClientListServlet() {
-        this.clientService = ClientService.getInstance();
+    @Override
+    public void init() throws ServletException {
+        super.init();
+        SpringBeanAutowiringSupport.processInjectionBasedOnCurrentContext(this);
     }
-
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {

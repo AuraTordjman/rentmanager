@@ -3,6 +3,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.epf.rentmanager.model.Client;
 import com.epf.rentmanager.model.Reservation;
 import com.epf.rentmanager.exception.DaoException;
 
@@ -10,9 +11,12 @@ import java.time.LocalDate;
 
 
 import com.epf.rentmanager.persistence.ConnectionManager;
-public class ReservationDao {
+import org.springframework.stereotype.Repository;
 
-	private static ReservationDao instance = null;
+@Repository
+public class ReservationDao {
+	public ReservationDao() {}
+	/*private static ReservationDao instance = null;
 	private ReservationDao() {}
 	public static ReservationDao getInstance() {
 		if(instance == null) {
@@ -20,6 +24,7 @@ public class ReservationDao {
 		}
 		return instance;
 	}
+	 */
 
 	private static final String CREATE_RESERVATION_QUERY = "INSERT INTO Reservation(client_id, vehicle_id, debut, fin) VALUES(?, ?, ?, ?);";
 	private static final String DELETE_RESERVATION_QUERY = "DELETE FROM Reservation WHERE id=?;";
@@ -203,6 +208,25 @@ public class ReservationDao {
 			}
 		} catch (SQLException e) {
 			throw new DaoException("Erreur lors du comptage des réservations.", e);
+		}
+	}
+	private static final String UPDATE_RESERVATION_QUERY = "UPDATE Reservation SET client_id=?, vehicle_id=?, debut=?, fin=? WHERE id=?;";
+
+	public void update(Reservation reservation) throws DaoException {
+		try (Connection connection = ConnectionManager.getConnection();
+			 PreparedStatement statement = connection.prepareStatement(UPDATE_RESERVATION_QUERY)) {
+			statement.setInt(1, reservation.getClient_id());
+			statement.setInt(2, reservation.getVehicle_id());
+			statement.setDate(3, java.sql.Date.valueOf(reservation.getDebut()));
+			statement.setDate(4, java.sql.Date.valueOf(reservation.getFin()));
+			statement.setLong(5, reservation.getId());
+
+			int affectedRows = statement.executeUpdate();
+			if (affectedRows == 0) {
+				throw new DaoException("La mise à jour de la resa a échoué, aucune ligne affectée.");
+			}
+		} catch (SQLException e) {
+			throw new DaoException("Erreur lors de la mise à jour de la resa.", e);
 		}
 	}
 
