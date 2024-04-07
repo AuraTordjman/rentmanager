@@ -81,5 +81,3 @@ public class ReservationEditServlet extends HttpServlet {
 
     }
 }
-// Impossible car modifie la clé étrangère : violation.
-// Supprimer la resa et creer une autre avec le meme id ??

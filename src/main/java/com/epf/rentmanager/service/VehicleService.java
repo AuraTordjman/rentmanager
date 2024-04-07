@@ -5,6 +5,7 @@ import java.util.List;
 import com.epf.rentmanager.exception.DaoException;
 import com.epf.rentmanager.exception.ServiceException;
 import com.epf.rentmanager.model.Client;
+import com.epf.rentmanager.model.Reservation;
 import com.epf.rentmanager.model.Vehicle;
 import com.epf.rentmanager.dao.ClientDao;
 import com.epf.rentmanager.dao.VehicleDao;
@@ -14,9 +15,11 @@ import org.springframework.stereotype.Service;
 public class VehicleService {
 
 	private final VehicleDao vehicleDao;
+	private final ReservationService reservationService;
 
-	public VehicleService(VehicleDao vehicleDao) {
+	public VehicleService(VehicleDao vehicleDao, ReservationService reservationService) {
 		this.vehicleDao = vehicleDao;
+		this.reservationService = reservationService;
 	}
 
 
@@ -27,10 +30,15 @@ public class VehicleService {
 			if (vehicle.getConstructeur().isEmpty()) {
 				throw new ServiceException("Le constructeur du véhicule ne peut pas être vide.");
 			}
-
+			if (vehicle.getModele().isEmpty()) {
+				throw new ServiceException("Le modèle du véhicule ne peut pas être vide.");
+			}
 
 			if (vehicle.getNb_places() <= 1) {
 				throw new ServiceException("Le nombre de places du véhicule doit être supérieur à 1.");
+			}
+			if (vehicle.getNb_places() > 9) {
+				throw new ServiceException("Le nombre de places du véhicule doit être inférieur à 9.");
 			}
 
 			return vehicleDao.create(vehicle);
@@ -43,6 +51,15 @@ public class VehicleService {
 	}
 	public void delete(long id) throws ServiceException {
 		try {
+			// Récupérer les réservations associées à un véhicule
+			List<Reservation> reservations = reservationService.findByVehicle(id);
+
+			// Supprimer les réservations associées
+			for (Reservation reservation : reservations) {
+				reservationService.delete(reservation.getId());
+			}
+
+			// Supprimer le véhicule
 			vehicleDao.delete(id);
 		} catch (DaoException e) {
 			throw new ServiceException("Erreur lors de la suppression du véhicule : " + e.getMessage(), e);

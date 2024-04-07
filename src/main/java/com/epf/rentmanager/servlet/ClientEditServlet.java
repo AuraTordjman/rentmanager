@@ -35,9 +35,9 @@ public class ClientEditServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
             int clientId = Integer.parseInt(request.getParameter("id"));
-            System.out.println(clientId);
+
             Client client = clientService.findById(clientId);
-            System.out.println(client);
+
             request.setAttribute("client", client);
 
             request.getRequestDispatcher("/WEB-INF/views/users/edit.jsp").forward(request, response);

@@ -215,8 +215,8 @@ public class ReservationDao {
 	public void update(Reservation reservation) throws DaoException {
 		try (Connection connection = ConnectionManager.getConnection();
 			 PreparedStatement statement = connection.prepareStatement(UPDATE_RESERVATION_QUERY)) {
-			statement.setInt(1, reservation.getClient_id());
-			statement.setInt(2, reservation.getVehicle_id());
+			statement.setLong(1, reservation.getClient_id());
+			statement.setLong(2, reservation.getVehicle_id());
 			statement.setDate(3, java.sql.Date.valueOf(reservation.getDebut()));
 			statement.setDate(4, java.sql.Date.valueOf(reservation.getFin()));
 			statement.setLong(5, reservation.getId());
@@ -229,6 +229,67 @@ public class ReservationDao {
 			throw new DaoException("Erreur lors de la mise à jour de la resa.", e);
 		}
 	}
+	public List<Reservation> findByVehicleAndDates(long vehicleId, LocalDate begin, LocalDate end) throws DaoException {
+		List<Reservation> reservations = new ArrayList<>();
+		String query = "SELECT * FROM Reservation WHERE vehicle_id = ? AND ((debut >= ? AND debut <= ?) OR (fin >= ? AND fin <= ?))";
+		try (Connection connection = ConnectionManager.getConnection();
+			 PreparedStatement statement = connection.prepareStatement(query)) {
+			statement.setLong(1, vehicleId);
+			statement.setDate(2, Date.valueOf(begin));
+			statement.setDate(3, Date.valueOf(end));
+			statement.setDate(4, Date.valueOf(begin));
+			statement.setDate(5, Date.valueOf(end));
 
+			try (ResultSet resultSet = statement.executeQuery()) {
+				while (resultSet.next()) {
+					Reservation reservation = new Reservation();
+					reservation.setId(resultSet.getInt("id"));
+					reservation.setClient_id(resultSet.getInt("client_id"));
+					reservation.setVehicle_id(resultSet.getInt("vehicle_id"));
+					reservation.setDebut(resultSet.getDate("debut").toLocalDate());
+					reservation.setFin(resultSet.getDate("fin").toLocalDate());
+					reservations.add(reservation);
+				}
+			}
+		} catch (SQLException e) {
+			throw new DaoException("Erreur lors de la recherche des réservations pour un véhicule donné et une période donnée : " + e.getMessage(), e);
+		}
+		return reservations;
+	}
+
+	public boolean isVehicleReservedForThirtyDaysOrMore(long vehicleId) throws DaoException {
+		final int MIN_CONSECUTIVE_DAYS = 30;
+		try (Connection connection = ConnectionManager.getConnection();
+			 PreparedStatement statement = connection.prepareStatement("SELECT debut, fin FROM Reservation WHERE vehicle_id = ? ORDER BY debut ASC")) {
+			statement.setLong(1, vehicleId);
+
+			try (ResultSet resultSet = statement.executeQuery()) {
+				LocalDate lastEndDate = null;
+				int consecutiveDaysReserved = 0;
+
+				while (resultSet.next()) {
+					LocalDate currentStartDate = resultSet.getDate("debut").toLocalDate();
+					LocalDate currentEndDate = resultSet.getDate("fin").toLocalDate();
+
+					if (lastEndDate != null && lastEndDate.plusDays(1).isEqual(currentStartDate)) {
+						// Il n'y a pas de pause entre les réservations
+						consecutiveDaysReserved += currentEndDate.compareTo(currentStartDate) + 1;
+					} else {
+						// Il y a une pause entre les réservations
+						consecutiveDaysReserved = currentEndDate.compareTo(currentStartDate) + 1;
+					}
+
+					lastEndDate = currentEndDate;
+
+					if (consecutiveDaysReserved >= MIN_CONSECUTIVE_DAYS) {
+						return true;
+					}
+				}
+			}
+		} catch (SQLException e) {
+			throw new DaoException("Erreur lors de la vérification de la durée de la réservation du véhicule", e);
+		}
+		return false;
+	}
 
 }

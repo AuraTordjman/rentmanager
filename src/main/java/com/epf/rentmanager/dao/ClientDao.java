@@ -157,7 +157,28 @@ public class ClientDao {
 			throw new DaoException("Erreur lors de la mise à jour du client.", e);
 		}
 	}
+	private static final String FIND_BY_EMAIL_QUERY = "SELECT id, nom, prenom, naissance FROM Client WHERE email=?;";
+	public Client findByEmail(String email) throws DaoException {
+		try (Connection connection = ConnectionManager.getConnection();
+			 PreparedStatement statement = connection.prepareStatement(FIND_BY_EMAIL_QUERY)) {
+			statement.setString(1, email);
 
+			try (ResultSet resultSet = statement.executeQuery()) {
+				if (resultSet.next()) {
+					long id = resultSet.getLong("id");
+					String nom = resultSet.getString("nom");
+					String prenom = resultSet.getString("prenom");
+					LocalDate naissance = resultSet.getDate("naissance").toLocalDate();
+
+					return new Client(id, nom, prenom, email, naissance);
+				} else {
+					return null; // Aucun client trouvé avec cet e-mail
+				}
+			}
+		} catch (SQLException e) {
+			throw new DaoException("Erreur lors de la recherche du client par e-mail.", e);
+		}
+	}
 
 
 }

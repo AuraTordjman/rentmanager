@@ -52,7 +52,7 @@ public class ClientCreateServlet extends HttpServlet {
 
             Client client = new Client(0, nom, prenom, email,naissance);
             clientService.create(client);
-            response.sendRedirect(request.getContextPath() + "/users/list");
+            response.sendRedirect(request.getContextPath() + "/users");
 
         } catch (Exception e) {
             throw new ServletException("Erreur lors de la création du client",e);
