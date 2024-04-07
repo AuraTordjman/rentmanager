@@ -16,22 +16,14 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class ClientDao {
 	public ClientDao() {}
-	/*
-	private static ClientDao instance = null;
-	private ClientDao() {}
-	public static ClientDao getInstance() {
-		if(instance == null) {
-			instance = new ClientDao();
-		}
-		return instance;
-	}
-	*/
 
     private static final String CREATE_CLIENT_QUERY = "INSERT INTO Client(nom, prenom, email, naissance) VALUES(?, ?, ?, ?);";
 	private static final String DELETE_CLIENT_QUERY = "DELETE FROM Client WHERE id=?;";
 	private static final String FIND_CLIENT_QUERY = "SELECT nom, prenom, email, naissance FROM Client WHERE id=?;";
 	private static final String FIND_CLIENTS_QUERY = "SELECT id, nom, prenom, email, naissance FROM Client;";
-	
+	private static final String FIND_BY_EMAIL_QUERY = "SELECT id, nom, prenom, naissance FROM Client WHERE email=?;";
+	private static final String UPDATE_CLIENT_QUERY = "UPDATE Client SET nom=?, prenom=?, email=?, naissance=? WHERE id=?;";
+
 	public long create(Client client) throws DaoException {
 		try (Connection connection = ConnectionManager.getConnection();
 			 PreparedStatement statement = connection.prepareStatement(CREATE_CLIENT_QUERY, PreparedStatement.RETURN_GENERATED_KEYS))
@@ -51,7 +43,7 @@ public class ClientDao {
 			{
 				if (generatedKeys.next())
 				{
-					return generatedKeys.getLong(1); // Retourne l'identifiant généré pour le client créé
+					return generatedKeys.getLong(1);
 				} else
 				{
 					throw new DaoException("La création du client a échoué, aucun identifiant retourné.");
@@ -72,14 +64,12 @@ public class ClientDao {
 			if (affectedRows == 0) {
 				throw new DaoException("La suppression du client a échoué, aucune ligne affectée.");
 			} else {
-				return clientId; // Retourne l'identifiant du client supprimé
+				return clientId;
 			}
 		} catch (SQLException e) {
 			throw new DaoException("Erreur lors de la suppression du client.", e);
 		}
 	}
-
-
 
 	public Client findById(long id) throws DaoException {
 		try (Connection connection = ConnectionManager.getConnection();
@@ -138,7 +128,6 @@ public class ClientDao {
 			throw new DaoException("Erreur lors du comptage des clients.", e);
 		}
 	}
-	private static final String UPDATE_CLIENT_QUERY = "UPDATE Client SET nom=?, prenom=?, email=?, naissance=? WHERE id=?;";
 
 	public void update(Client client) throws DaoException {
 		try (Connection connection = ConnectionManager.getConnection();
@@ -157,7 +146,7 @@ public class ClientDao {
 			throw new DaoException("Erreur lors de la mise à jour du client.", e);
 		}
 	}
-	private static final String FIND_BY_EMAIL_QUERY = "SELECT id, nom, prenom, naissance FROM Client WHERE email=?;";
+
 	public Client findByEmail(String email) throws DaoException {
 		try (Connection connection = ConnectionManager.getConnection();
 			 PreparedStatement statement = connection.prepareStatement(FIND_BY_EMAIL_QUERY)) {
@@ -172,7 +161,7 @@ public class ClientDao {
 
 					return new Client(id, nom, prenom, email, naissance);
 				} else {
-					return null; // Aucun client trouvé avec cet e-mail
+					return null;
 				}
 			}
 		} catch (SQLException e) {

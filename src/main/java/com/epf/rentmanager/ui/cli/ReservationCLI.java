@@ -1,8 +1,6 @@
 package com.epf.rentmanager.ui.cli;
-
 import java.time.LocalDate;
 import java.util.List;
-
 import com.epf.rentmanager.exception.ServiceException;
 import com.epf.rentmanager.model.Reservation;
 import com.epf.rentmanager.service.ReservationService;
@@ -80,8 +78,7 @@ public class ReservationCLI {
             int choice = 0;
             do {
                 choice = IOUtils.readInt("Votre choix :");
-            } while (choice < 1 || choice > 4); // Modifier le nombre d'options
-
+            } while (choice < 1 || choice > 4);
             switch (choice) {
                 case 1:
                     reservationCLI.createReservation();
@@ -96,7 +93,7 @@ public class ReservationCLI {
                     exit = true;
                     break;
                 default:
-                    System.out.println("Choix invalide. Veuillez choisir une option entre 1 et 3."); // Modifier le message d'erreur
+                    System.out.println("Choix invalide. Veuillez choisir une option entre 1 et 3.");
             }
         } while (!exit);
     }

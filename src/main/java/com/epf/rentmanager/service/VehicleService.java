@@ -1,13 +1,9 @@
 package com.epf.rentmanager.service;
-
 import java.util.List;
-
 import com.epf.rentmanager.exception.DaoException;
 import com.epf.rentmanager.exception.ServiceException;
-import com.epf.rentmanager.model.Client;
 import com.epf.rentmanager.model.Reservation;
 import com.epf.rentmanager.model.Vehicle;
-import com.epf.rentmanager.dao.ClientDao;
 import com.epf.rentmanager.dao.VehicleDao;
 import org.springframework.stereotype.Service;
 
@@ -34,8 +30,8 @@ public class VehicleService {
 				throw new ServiceException("Le modèle du véhicule ne peut pas être vide.");
 			}
 
-			if (vehicle.getNb_places() <= 1) {
-				throw new ServiceException("Le nombre de places du véhicule doit être supérieur à 1.");
+			if (vehicle.getNb_places() <= 2) {
+				throw new ServiceException("Le nombre de places du véhicule doit être supérieur à 2.");
 			}
 			if (vehicle.getNb_places() > 9) {
 				throw new ServiceException("Le nombre de places du véhicule doit être inférieur à 9.");
@@ -51,15 +47,15 @@ public class VehicleService {
 	}
 	public void delete(long id) throws ServiceException {
 		try {
-			// Récupérer les réservations associées à un véhicule
+
 			List<Reservation> reservations = reservationService.findByVehicle(id);
 
-			// Supprimer les réservations associées
+
 			for (Reservation reservation : reservations) {
 				reservationService.delete(reservation.getId());
 			}
 
-			// Supprimer le véhicule
+
 			vehicleDao.delete(id);
 		} catch (DaoException e) {
 			throw new ServiceException("Erreur lors de la suppression du véhicule : " + e.getMessage(), e);
@@ -68,10 +64,10 @@ public class VehicleService {
 
 	public Vehicle findById(long id) throws ServiceException {
 		try {
-			// Appeler la méthode findById du DAO pour récupérer un véhicule par son id
+
 			return vehicleDao.findById(id);
 		} catch (DaoException e) {
-			// En cas d'erreur lors de la recherche dans la base de données, lever une ServiceException
+
 			ServiceException serviceException = new ServiceException("Erreur lors de la recherche du véhicule par son identifiant : " + e.getMessage());
 			serviceException.initCause(e);
 			throw serviceException;
@@ -80,10 +76,10 @@ public class VehicleService {
 
 	public List<Vehicle> findAll() throws ServiceException {
 		try {
-			// Appeler la méthode findAll du DAO pour récupérer tous les véhicules
+
 			return vehicleDao.findAll();
 		} catch (DaoException e) {
-			// En cas d'erreur lors de la recherche dans la base de données, lever une ServiceException
+
 			ServiceException serviceException = new ServiceException("Erreur lors de la recherche de tous les véhicules : " + e.getMessage());
 			serviceException.initCause(e);
 			throw serviceException;

@@ -16,34 +16,23 @@ import org.springframework.stereotype.Repository;
 
 public class VehicleDao {
 	public VehicleDao() {}
-	
-	/*private static VehicleDao instance = null;
-	private VehicleDao() {}
-	public static VehicleDao getInstance() {
-		if(instance == null) {
-			instance = new VehicleDao();
-		}
-		return instance;
-	}
 
-	 */
 	
 	private static final String CREATE_VEHICLE_QUERY = "INSERT INTO Vehicle(constructeur, modele, nb_places) VALUES(?, ? ,?);";
 	private static final String DELETE_VEHICLE_QUERY = "DELETE FROM Vehicle WHERE id=?;";
 	private static final String FIND_VEHICLE_QUERY = "SELECT id, constructeur,modele, nb_places FROM Vehicle WHERE id=?;";
 	private static final String FIND_VEHICLES_QUERY = "SELECT id, constructeur, modele, nb_places FROM Vehicle;";
-
+	private static final String UPDATE_VEHICLE_QUERY = "UPDATE Vehicle SET constructeur=?, modele=?, nb_places=? WHERE id=?;";
 	public long create(Vehicle vehicule) throws DaoException {
 		try(Connection connection = ConnectionManager.getConnection();
 			Statement statement = connection.createStatement();
 			PreparedStatement ps = connection.prepareStatement(CREATE_VEHICLE_QUERY, statement.RETURN_GENERATED_KEYS);){
 
-			// Assignation des valeurs aux paramètres de la requête
 			ps.setString(1, vehicule.getConstructeur());
 			ps.setString(2, vehicule.getModele());
 			ps.setInt(3, vehicule.getNb_places());
 
-			// Exécution de la requête
+
 			ps.execute();
 
 			ResultSet resultSet = ps.getGeneratedKeys();
@@ -69,7 +58,7 @@ public class VehicleDao {
 			if (affectedRows == 0) {
 				throw new DaoException("La suppression du véhicule a échoué, aucune ligne affectée.");
 			} else {
-				return id; // Retourne l'identifiant du véhicule supprimé
+				return id;
 			}
 		} catch (SQLException e) {
 			throw new DaoException("Erreur lors de la suppression du véhicule.", e);
@@ -132,7 +121,7 @@ public class VehicleDao {
 			throw new DaoException("Erreur lors du comptage des véhicules.", e);
 		}
 	}
-	private static final String UPDATE_VEHICLE_QUERY = "UPDATE Vehicle SET constructeur=?, modele=?, nb_places=? WHERE id=?;";
+
 	public void update(Vehicle vehicle) throws DaoException {
 		try (Connection connection = ConnectionManager.getConnection();
 			 PreparedStatement statement = connection.prepareStatement(UPDATE_VEHICLE_QUERY)) {

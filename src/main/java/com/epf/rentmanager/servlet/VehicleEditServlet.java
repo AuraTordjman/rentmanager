@@ -1,12 +1,9 @@
 package com.epf.rentmanager.servlet;
-
 import com.epf.rentmanager.exception.ServiceException;
 import com.epf.rentmanager.model.Vehicle;
-import com.epf.rentmanager.service.ClientService;
 import com.epf.rentmanager.service.VehicleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.context.support.SpringBeanAutowiringSupport;
-
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -30,9 +27,7 @@ public class VehicleEditServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
             int vehicleId = Integer.parseInt(request.getParameter("id"));
-            //System.out.println(clientId);
             Vehicle vehicle = vehicleService.findById(vehicleId);
-            //System.out.println(client);
             request.setAttribute("vehicle", vehicle);
 
             request.getRequestDispatcher("/WEB-INF/views/vehicles/edit.jsp").forward(request, response);
@@ -48,7 +43,6 @@ public class VehicleEditServlet extends HttpServlet {
             String constructeur = request.getParameter("constructeur");
             String modele= request.getParameter("modele");
             int nb_places = Integer.parseInt(request.getParameter("nb_places"));
-            //System.out.println(request.getParameter("naissance"));
 
             Vehicle updatedVehicle = new Vehicle(vehicleId, constructeur, modele, nb_places);
             vehicleService.update(updatedVehicle);

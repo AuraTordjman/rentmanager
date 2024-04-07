@@ -1,10 +1,8 @@
 package com.epf.rentmanager.ui.cli;
-
 import com.epf.rentmanager.exception.ServiceException;
 import com.epf.rentmanager.model.Client;
 import com.epf.rentmanager.service.ClientService;
 import com.epf.rentmanager.utils.IOUtils;
-
 import java.time.LocalDate;
 
 public class ClientCLI {
@@ -58,12 +56,8 @@ public class ClientCLI {
     public void deleteClient() {
         try {
             System.out.println("Suppression d'un client :");
-            listClients(); // Afficher la liste des clients disponibles pour lui rappeler ceux qui existent
-
-            // Demande de saisir l'id du client à supprimer
+            listClients();
             long idToDelete = IOUtils.readInt("Entrez l'ID du client à supprimer : ");
-
-            // Appeler la méthode de suppression du ClientService
             clientService.delete(idToDelete);
             System.out.println("Client supprimé avec succès !");
         } catch (ServiceException e) {
@@ -82,7 +76,7 @@ public class ClientCLI {
             int choice = 0;
             do {
                 choice = IOUtils.readInt("Votre choix :");
-            } while (choice < 1 || choice > 4); // Modifier le nombre d'options
+            } while (choice < 1 || choice > 4);
 
             switch (choice) {
                 case 1:
@@ -93,12 +87,12 @@ public class ClientCLI {
                     break;
                 case 3:
                     clientCLI.deleteClient();
-                    break; // Ajouter un case pour la suppression
+                    break;
                 case 4:
                     exit = true;
                     break;
                 default:
-                    System.out.println("Choix invalide. Veuillez choisir une option entre 1 et 4."); // Modifier le message d'erreur
+                    System.out.println("Choix invalide. Veuillez choisir une option entre 1 et 4.");
             }
         } while (!exit);
     }
@@ -107,7 +101,7 @@ public class ClientCLI {
         System.out.println("Menu :");
         System.out.println("1. Créer un client");
         System.out.println("2. Lister les clients");
-        System.out.println("3. Supprimer un client"); // Ajouter une option de suppression
+        System.out.println("3. Supprimer un client");
         System.out.println("4. Quitter");
     }
 
