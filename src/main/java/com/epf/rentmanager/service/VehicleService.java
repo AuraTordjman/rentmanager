@@ -19,7 +19,6 @@ public class VehicleService {
 	}
 
 
-
 	public long create(Vehicle vehicle) throws ServiceException {
 		try {
 
@@ -30,7 +29,7 @@ public class VehicleService {
 				throw new ServiceException("Le modèle du véhicule ne peut pas être vide.");
 			}
 
-			if (vehicle.getNb_places() <= 2) {
+			if (vehicle.getNb_places() < 2) {
 				throw new ServiceException("Le nombre de places du véhicule doit être supérieur à 2.");
 			}
 			if (vehicle.getNb_places() > 9) {
@@ -45,6 +44,7 @@ public class VehicleService {
 			throw serviceException;
 		}
 	}
+
 	public void delete(long id) throws ServiceException {
 		try {
 
@@ -85,16 +85,32 @@ public class VehicleService {
 			throw serviceException;
 		}
 	}
+
 	public int countVehicles() throws DaoException {
 		return vehicleDao.count();
 	}
+
 	public void update(Vehicle vehicle) throws ServiceException {
 		try {
+			if (vehicle.getConstructeur().isEmpty()) {
+				throw new ServiceException("Le constructeur du véhicule ne peut pas être vide.");
+			}
+			if (vehicle.getModele().isEmpty()) {
+				throw new ServiceException("Le modèle du véhicule ne peut pas être vide.");
+			}
+
+			if (vehicle.getNb_places() < 2) {
+				throw new ServiceException("Le nombre de places du véhicule doit être supérieur à 2.");
+			}
+			if (vehicle.getNb_places() > 9) {
+				throw new ServiceException("Le nombre de places du véhicule doit être inférieur à 9.");
+			}
+
 			vehicleDao.update(vehicle);
 		} catch (DaoException e) {
-			throw new ServiceException("Error updating client: " + e.getMessage(), e);
+			throw new ServiceException("Erreur lors de la mise à jour du véhicule : " + e.getMessage(), e);
 		}
+
+
 	}
-
-
 }
